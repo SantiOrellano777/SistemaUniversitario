@@ -1,26 +1,29 @@
 package com.miapp.modelo;
-
+import com.miapp.servicios.Inscribible;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Modelo: representa la entidad Estudiante.
  */
-public final class Estudiante extends Persona {  
+public final class Estudiante extends Persona implements Inscribible {  
 
     private static int totalEstudiantes = 0;
     public static final int PROMEDIO_MINIMO = 0;
     public static final int PROMEDIO_MAXIMO = 5;
     public static final String CARRERA_PREDETERMINADA = "Sin especificar";
+    public static final int MAX_MATERIAS = 5;
+    private static final double COSTO_POR_CREDITO = 150000;
 
     // ── Atributos de instancia ────────────────────────────────────────────────
    
     private String carrera;
     private double promedio;
+    private List<Curso> cursosInscritos;
 
     // ── Constructor ───────────────────────────────────────────────────────────
 
     public Estudiante(int id, String nombre, String apellido, String carrera, double promedio) {
-        this.id       = id;
-        this.nombre   = nombre;
-        this.apellido = apellido;
+        super(nombre, apellido, id);
         this.carrera  = carrera;
    
         if (promedio >= PROMEDIO_MINIMO && promedio <= PROMEDIO_MAXIMO) {
@@ -28,7 +31,7 @@ public final class Estudiante extends Persona {
         } else {
             this.promedio = 0.0;  // Por defecto si está fuera de rango
         }
-        
+        this.cursosInscritos = new ArrayList<>();
         // nuevo: Incrementa el contador estático de estudiantes
         totalEstudiantes++;
     }
@@ -48,19 +51,6 @@ public final class Estudiante extends Persona {
     
     }
 
-    // ── Getters ──────────────────────────────────────────────────────────────
-
-    public int getId() { 
-        return id; 
-    }
-
-    public String getNombre() { 
-        return nombre; 
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
 
     public String getCarrera() { 
         return carrera; 
@@ -70,19 +60,7 @@ public final class Estudiante extends Persona {
         return promedio; 
     }
 
-    // ── Setters ──────────────────────────────────────────────────────────────
-
-    public void setId(int id) { 
-        this.id = id; 
-    }
-
-    public void setNombre(String nombre) { 
-        this.nombre = nombre; 
-    }
-
-    public void setApellido(String apellido) { 
-        this.apellido = apellido; 
-    }
+  
 
     public void setCarrera(String carrera) { 
         this.carrera = carrera; 
@@ -98,15 +76,44 @@ public final class Estudiante extends Persona {
             this.promedio = p;
         }
     }
+    
+    public List<Curso> getCursosInscritos() {
+        return cursosInscritos;
+    }
+
+    @Override
+    public boolean inscribir(Curso curso) {
+        if (curso == null) {
+            return false;
+        }
+        if (cursosInscritos.contains(curso)) {
+            return false;
+        }
+        if (cursosInscritos.size() >= MAX_MATERIAS) {
+            return false;
+        }
+        cursosInscritos.add(curso);
+        curso.matricular(this);
+        return true;
+    }
+    
+    @Override
+    public double calcularPago() {
+        double total = 0;
+        for (Curso c : cursosInscritos) {
+            total += c.getCreditos() * COSTO_POR_CREDITO;
+        }
+        return total;
+    }
 
     /**
      Método final: no puede ser sobrescrito por subclases
      */
     @Override
     public final String toString() {
-        return "ID: " + id
-             + " | Nombre: " + nombre
-             + " | Apellido: " + apellido   
+        return "ID: " + getId()
+             + " | Nombre: " + getNombre()
+             + " | Apellido: " + getApellido()
              + " | Carrera: " + carrera
              + " | Promedio: " + String.format("%.2f", promedio);
     }

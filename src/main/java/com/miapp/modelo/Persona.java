@@ -47,8 +47,7 @@ public abstract class Persona {
         this.id = id;
     }
 
-    //jaja
     
     
-    
+    public abstract double calcularPago();
 }
