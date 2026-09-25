@@ -44,9 +44,15 @@ public class EstudianteView extends JFrame {
     private static final Color COLOR_BOTON_AGREGAR = new Color(103, 58, 183);
     private static final Color COLOR_BOTON_TEXTO = Color.WHITE;
     private static final Color COLOR_ESTADO_TEXTO = Color.GRAY;
+    private static final String TITULO_PANEL_CURSO = "Buscar por curso";
+    private static final String TITULO_PANEL_ESTADO = "Buscar por estado de matrícula";
+    private static final String LABEL_CURSO = "Código de curso:";
+    private static final String LABEL_ESTADO = "Estado:";
+    private static final String BOTON_BUSCAR_CURSO = "Buscar por Curso";
+    private static final String BOTON_BUSCAR_ESTADO = "Buscar por Estado";
 
     // ── Columnas de la tabla (constante final) ─────────────────────────────────
-    private static final String[] COLUMNAS_TABLA = {"ID", "Nombre", "Apellido", "Carrera", "Promedio"};
+    private static final String[] COLUMNAS_TABLA = {"ID", "Nombre", "Apellido", "Carrera", "Promedio", "Estado"};
     private static final int INDICE_PROMEDIO = 4;
 
     // ── Componentes UI - Búsqueda por nombre ────────────────────────────────────
@@ -57,6 +63,10 @@ public class EstudianteView extends JFrame {
     private JComboBox<String>      cmbCarrera;
     private JButton                btnBuscarCarrera;
     private JButton                btnLimpiar;
+    private JComboBox<String> cmbCurso;
+    private JButton btnBuscarCurso;
+    private JComboBox<String> cmbEstado;
+    private JButton btnBuscarEstado;
 
     // ── Componentes UI - Agregar estudiante ────────────────────────────────────
     private JTextField             txtAgregarNombre;
@@ -133,6 +143,48 @@ public class EstudianteView extends JFrame {
         panelCarrera.add(cmbCarrera);
         panelCarrera.add(btnBuscarCarrera);
         panelCarrera.add(btnLimpiar);
+        
+        panelCarrera.add(lblCarrera);
+panelCarrera.add(cmbCarrera);
+panelCarrera.add(btnBuscarCarrera);
+panelCarrera.add(btnLimpiar);
+
+// Panel búsqueda por curso (Fila 3)
+JPanel panelCurso = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+panelCurso.setBorder(BorderFactory.createTitledBorder(TITULO_PANEL_CURSO));
+
+JLabel lblCurso = new JLabel(LABEL_CURSO);
+cmbCurso = new JComboBox<>();
+cmbCurso.addItem(OPCION_SELECCIONAR);
+// Se carga después, cuando el controlador esté disponible
+
+btnBuscarCurso = new JButton(BOTON_BUSCAR_CURSO);
+btnBuscarCurso.setBackground(COLOR_BOTON_CARRERA);
+btnBuscarCurso.setForeground(COLOR_BOTON_TEXTO);
+btnBuscarCurso.setFocusPainted(false);
+
+panelCurso.add(lblCurso);
+panelCurso.add(cmbCurso);
+panelCurso.add(btnBuscarCurso);
+
+// Panel búsqueda por estado de matrícula (Fila 4)
+JPanel panelEstado = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+panelEstado.setBorder(BorderFactory.createTitledBorder(TITULO_PANEL_ESTADO));
+
+JLabel lblEstadoBusqueda = new JLabel(LABEL_ESTADO);
+cmbEstado = new JComboBox<>();
+cmbEstado.addItem(OPCION_SELECCIONAR);
+// Se carga después, cuando el controlador esté disponible
+
+btnBuscarEstado = new JButton(BOTON_BUSCAR_ESTADO);
+btnBuscarEstado.setBackground(COLOR_BOTON_CARRERA);
+btnBuscarEstado.setForeground(COLOR_BOTON_TEXTO);
+btnBuscarEstado.setFocusPainted(false);
+
+panelEstado.add(lblEstadoBusqueda);
+panelEstado.add(cmbEstado);
+panelEstado.add(btnBuscarEstado);
+
 
         // Panel agregar estudiante (Fila 3)
         JPanel panelAgregar = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
