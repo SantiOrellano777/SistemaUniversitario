@@ -9,7 +9,7 @@ import java.util.List;
 //jajajaj
 //jajajjaj//jajajajaj//jajaja
 import com.miapp.modelo.Curso;
-import com.miapp.modelo.EstadoMatricula;
+import com.miapp.utilidades.EstadoMatricula;
 
 
 public class EstudianteController implements IBuscador {

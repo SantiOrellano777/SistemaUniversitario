@@ -1,5 +1,6 @@
 package com.miapp.modelo;
 import com.miapp.servicios.Inscribible;
+import com.miapp.utilidades.EstadoMatricula;
 import java.util.ArrayList;
 import java.util.List;
 /**

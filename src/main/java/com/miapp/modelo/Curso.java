@@ -15,6 +15,7 @@ public class Curso {
     private String codigo;
     private int creditos;
     private List<Estudiante> estudiantesInscritos;
+    private Profesor profesor;
     
     
     public Curso(String codigo, int creditos) {
@@ -43,6 +44,14 @@ public class Curso {
         return estudiantesInscritos;
     }
     
+    public Profesor getProfesor() {
+    return profesor;
+}
+
+    public void setProfesor(Profesor profesor) {
+    this.profesor = profesor;
+    }
+    
     void matricular(Estudiante estudiante) {
         if (!estudiantesInscritos.contains(estudiante)) {
             estudiantesInscritos.add(estudiante);
@@ -51,7 +60,8 @@ public class Curso {
 
     
     @Override
-    public String toString() {
-        return "Curso [codigo=" + codigo + ", creditos=" + creditos + "]";
-    }
+public String toString() {
+    String nombreProfesor = (profesor != null) ? profesor.getNombre() + " " + profesor.getApellido() : "(ninguno)";
+    return "Curso [codigo=" + codigo + ", creditos=" + creditos + ", profesor=" + nombreProfesor + "]";
+}
 }
