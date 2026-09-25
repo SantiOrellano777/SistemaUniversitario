@@ -19,6 +19,8 @@ public class EstudianteController implements IBuscador {
     private static final String MENSAJE_BUSQUEDA_VACIA = "Por favor ingrese un nombre para buscar.";
     private static final String MENSAJE_BUSQUEDA_CARRERA_VACIA = "Por favor seleccione una carrera para buscar.";
     private static final String MENSAJE_SIN_RESULTADOS = "No se encontraron estudiantes con ese criterio.";
+    private static final String MENSAJE_BUSQUEDA_CURSO_VACIA = "Por favor ingrese el código de un curso para buscar.";
+    private static final String MENSAJE_BUSQUEDA_ESTADO_VACIA = "Por favor seleccione un estado de matrícula para buscar.";
 
     // ── Vista ─────────────────────────────────────────────────────────────────
     private EstudianteView vista;
@@ -167,17 +169,56 @@ public class EstudianteController implements IBuscador {
         // Mostrar resultados (ya convertidos a filas, no como Estudiante)
         vista.mostrarEstudiantes(convertirAFilas(resultados));
     }
+    
+    private void buscarPorCurso(String codigoCurso) {
+    if (codigoCurso == null || codigoCurso.isEmpty() || codigoCurso.equals("Seleccionar...")) {
+        vista.mostrarError(MENSAJE_BUSQUEDA_CURSO_VACIA);
+        return;
+    }
+
+    List<Estudiante> resultados = new ArrayList<>();
+
+    for (Estudiante e : estudiantes) {
+        if (e == null) continue;
+        for (Curso c : e.getCursosInscritos()) {
+            if (c.getCodigo().equalsIgnoreCase(codigoCurso)) {
+                resultados.add(e);
+                break;
+            }
+        }
+    }
+
+    vista.mostrarEstudiantes(convertirAFilas(resultados));
+}
+
+    private void buscarPorEstado(String estadoMatricula) {
+    if (estadoMatricula == null || estadoMatricula.isEmpty() || estadoMatricula.equals("Seleccionar...")) {
+        vista.mostrarError(MENSAJE_BUSQUEDA_ESTADO_VACIA);
+        return;
+    }
+
+    List<Estudiante> resultados = new ArrayList<>();
+
+    for (Estudiante e : estudiantes) {
+        if (e != null && e.getEstadoMatricula().name().equalsIgnoreCase(estadoMatricula)) {
+            resultados.add(e);
+        }
+    }
+
+    vista.mostrarEstudiantes(convertirAFilas(resultados));
+    }
 
     
     private Object[] convertirAFila(Estudiante e) {
-        return new Object[]{
-            e.getId(),
-            e.getNombre(),
-            e.getApellido(),
-            e.getCarrera(),
-            String.format("%.2f", e.getPromedio())
-        };
-    }
+    return new Object[]{
+        e.getId(),
+        e.getNombre(),
+        e.getApellido(),
+        e.getCarrera(),
+        String.format("%.2f", e.getPromedio()),
+        e.getEstadoMatricula()
+    };
+}
 
   
     private List<Object[]> convertirAFilas(List<Estudiante> lista) {
@@ -209,6 +250,23 @@ public class EstudianteController implements IBuscador {
             }
         }
         return carreras.toArray(new String[0]);
+    }
+    
+    public String[] obtenerCodigosCursos() {
+    String[] codigos = new String[cursos.length];
+    for (int i = 0; i < cursos.length; i++) {
+        codigos[i] = cursos[i].getCodigo();
+    }
+    return codigos;
+    }
+
+    public String[] obtenerEstadosMatricula() {
+    EstadoMatricula[] valores = EstadoMatricula.values();
+    String[] nombres = new String[valores.length];
+    for (int i = 0; i < valores.length; i++) {
+        nombres[i] = valores[i].name();
+    }
+    return nombres;
     }
 
  
