@@ -345,6 +345,22 @@ public class EstudianteView extends JFrame {
         btnLimpiar.addActionListener((ActionEvent e) -> {
             limpiarBusqueda();
         });
+        
+        
+    btnBuscarCurso.addActionListener((ActionEvent e) -> {
+    if (controlador != null) {
+        String cursoSeleccionado = (String) cmbCurso.getSelectedItem();
+        controlador.buscarEstudiantePorCurso(cursoSeleccionado);
+    }
+    });
+
+
+    btnBuscarEstado.addActionListener((ActionEvent e) -> {
+        if (controlador != null) {
+        String estadoSeleccionado = (String) cmbEstado.getSelectedItem();
+        controlador.buscarEstudiantePorEstado(estadoSeleccionado);
+        }
+    });
 
         // Evento: agregar nuevo estudiante
         btnAgregar.addActionListener((ActionEvent e) -> {
@@ -409,11 +425,13 @@ public class EstudianteView extends JFrame {
 
    
     public void setControlador(EstudianteController controlador) {
-        this.controlador = controlador;
-        cargarCarreras();
-        cargarCarrerasAgregar();
-        actualizarTotalEstudiantes();
-    }
+    this.controlador = controlador;
+    cargarCarreras();
+    cargarCarrerasAgregar();
+    cargarCursos();
+    cargarEstados();
+    actualizarTotalEstudiantes();
+}
 
 
     private void actualizarTotalEstudiantes() {
@@ -425,11 +443,13 @@ public class EstudianteView extends JFrame {
      * Limpia todos los campos de búsqueda y la tabla.
      */
     private void limpiarBusqueda() {
-        txtNombre.setText("");
-        cmbCarrera.setSelectedIndex(0);
-        limpiarTabla();
-        setEstado(MENSAJE_INICIAL);
-    }
+    txtNombre.setText("");
+    cmbCarrera.setSelectedIndex(0);
+    cmbCurso.setSelectedIndex(0);
+    cmbEstado.setSelectedIndex(0);
+    limpiarTabla();
+    setEstado(MENSAJE_INICIAL);
+}
 
     /**
      * Limpia todas las filas de la tabla.

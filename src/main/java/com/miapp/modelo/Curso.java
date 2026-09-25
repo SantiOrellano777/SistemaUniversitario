@@ -9,6 +9,8 @@ import java.util.List;
  *
  * @author Estudiante
  */
+
+//jajaja
 public class Curso {
     private String codigo;
     private int creditos;
