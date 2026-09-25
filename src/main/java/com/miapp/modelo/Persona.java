@@ -48,6 +48,6 @@ public abstract class Persona {
     }
 
     
-    
     public abstract double calcularPago();
+    
 }
