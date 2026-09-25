@@ -3,11 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.miapp.modelo;
-
+//jajaja
 /**
  *
  * @author SANTIAGO
  */
-public class EstadoMatricula {
-    
+public enum EstadoMatricula {
+   ACTIVO,
+    RETIRADO,
+    GRADUADO,
+    SUSPENDIDO 
 }

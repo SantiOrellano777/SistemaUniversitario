@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 //jajajaj
 //jajajjaj//jajajajaj//jajaja
+import com.miapp.modelo.Curso;
+import com.miapp.modelo.EstadoMatricula;
+
 
 public class EstudianteController implements IBuscador {
 
@@ -22,6 +25,7 @@ public class EstudianteController implements IBuscador {
 
     // ── Array de estudiantes (fuente de datos) ────────────────────────────────
     private Estudiante[] estudiantes;
+    private Curso[] cursos;
 
     // ── Constructor ───────────────────────────────────────────────────────────
 
@@ -49,6 +53,16 @@ public class EstudianteController implements IBuscador {
     public void buscarEstudiantePorCarrera(String carrera) {
         buscarPorCarrera(carrera);
     }
+    
+    @Override
+    public void buscarEstudiantePorCurso(String codigoCurso) {
+    buscarPorCurso(codigoCurso);
+    }
+
+    @Override
+    public void buscarEstudiantePorEstado(String estadoMatricula) {
+    buscarPorEstado(estadoMatricula);
+    }   
 
     // ── Carga de datos iniciales ──────────────────────────────────────────────
 
@@ -73,7 +87,31 @@ public class EstudianteController implements IBuscador {
 
         // Log: informa cuántos estudiantes se cargaron usando static getTotalEstudiantes()
         System.out.println("Total de estudiantes cargados: " + Estudiante.getTotalEstudiantes());
+        inicializarCursos();
+        asignarEstadosYMatriculasDeEjemplo();
     }
+    
+    private void inicializarCursos() {
+    cursos = new Curso[]{
+        new Curso("SIS101", 3),
+        new Curso("MAT201", 4),
+        new Curso("PSI150", 2)
+    };
+}
+
+    private void asignarEstadosYMatriculasDeEjemplo() {
+    if (estudiantes.length > 0 && estudiantes[0] != null) estudiantes[0].inscribir(cursos[0]);
+    if (estudiantes.length > 1 && estudiantes[1] != null) estudiantes[1].inscribir(cursos[0]);
+    if (estudiantes.length > 2 && estudiantes[2] != null) estudiantes[2].inscribir(cursos[1]);
+    if (estudiantes.length > 3 && estudiantes[3] != null) {
+        estudiantes[3].inscribir(cursos[1]);
+        estudiantes[3].setEstadoMatricula(EstadoMatricula.RETIRADO);
+    }
+    if (estudiantes.length > 9 && estudiantes[9] != null) {
+        estudiantes[9].setEstadoMatricula(EstadoMatricula.GRADUADO);
+    }
+    if (estudiantes.length > 5 && estudiantes[5] != null) estudiantes[5].inscribir(cursos[2]);
+}
 
     // ── Lógica de búsqueda ────────────────────────────────────────────────────
 

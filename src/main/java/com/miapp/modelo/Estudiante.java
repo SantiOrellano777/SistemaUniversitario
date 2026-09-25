@@ -19,6 +19,7 @@ public final class Estudiante extends Persona implements Inscribible {
     private String carrera;
     private double promedio;
     private List<Curso> cursosInscritos;
+    private EstadoMatricula estadoMatricula;
 
     // ── Constructor ───────────────────────────────────────────────────────────
 
@@ -32,6 +33,7 @@ public final class Estudiante extends Persona implements Inscribible {
             this.promedio = 0.0;  // Por defecto si está fuera de rango
         }
         this.cursosInscritos = new ArrayList<>();
+        this.estadoMatricula = EstadoMatricula.ACTIVO;
         // nuevo: Incrementa el contador estático de estudiantes
         totalEstudiantes++;
     }
@@ -79,6 +81,16 @@ public final class Estudiante extends Persona implements Inscribible {
     
     public List<Curso> getCursosInscritos() {
         return cursosInscritos;
+    }
+    
+    public EstadoMatricula getEstadoMatricula() {
+    return estadoMatricula;
+}
+
+    public void setEstadoMatricula(EstadoMatricula estadoMatricula) {
+    if (estadoMatricula != null) {
+        this.estadoMatricula = estadoMatricula;
+    }
     }
 
     @Override
