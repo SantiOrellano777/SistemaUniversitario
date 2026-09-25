@@ -145,45 +145,45 @@ public class EstudianteView extends JFrame {
         panelCarrera.add(btnLimpiar);
         
         panelCarrera.add(lblCarrera);
-panelCarrera.add(cmbCarrera);
-panelCarrera.add(btnBuscarCarrera);
-panelCarrera.add(btnLimpiar);
+    panelCarrera.add(cmbCarrera);
+    panelCarrera.add(btnBuscarCarrera);
+    panelCarrera.add(btnLimpiar);
 
 // Panel búsqueda por curso (Fila 3)
-JPanel panelCurso = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-panelCurso.setBorder(BorderFactory.createTitledBorder(TITULO_PANEL_CURSO));
+    JPanel panelCurso = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+    panelCurso.setBorder(BorderFactory.createTitledBorder(TITULO_PANEL_CURSO));
 
-JLabel lblCurso = new JLabel(LABEL_CURSO);
-cmbCurso = new JComboBox<>();
-cmbCurso.addItem(OPCION_SELECCIONAR);
+    JLabel lblCurso = new JLabel(LABEL_CURSO);
+    cmbCurso = new JComboBox<>();
+    cmbCurso.addItem(OPCION_SELECCIONAR);
 // Se carga después, cuando el controlador esté disponible
 
-btnBuscarCurso = new JButton(BOTON_BUSCAR_CURSO);
-btnBuscarCurso.setBackground(COLOR_BOTON_CARRERA);
-btnBuscarCurso.setForeground(COLOR_BOTON_TEXTO);
-btnBuscarCurso.setFocusPainted(false);
+    btnBuscarCurso = new JButton(BOTON_BUSCAR_CURSO);
+    btnBuscarCurso.setBackground(COLOR_BOTON_CARRERA);
+    btnBuscarCurso.setForeground(COLOR_BOTON_TEXTO);
+    btnBuscarCurso.setFocusPainted(false);
 
-panelCurso.add(lblCurso);
-panelCurso.add(cmbCurso);
-panelCurso.add(btnBuscarCurso);
+    panelCurso.add(lblCurso);
+    panelCurso.add(cmbCurso);
+    panelCurso.add(btnBuscarCurso);
 
-// Panel búsqueda por estado de matrícula (Fila 4)
-JPanel panelEstado = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-panelEstado.setBorder(BorderFactory.createTitledBorder(TITULO_PANEL_ESTADO));
 
-JLabel lblEstadoBusqueda = new JLabel(LABEL_ESTADO);
-cmbEstado = new JComboBox<>();
-cmbEstado.addItem(OPCION_SELECCIONAR);
-// Se carga después, cuando el controlador esté disponible
+    JPanel panelEstado = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+    panelEstado.setBorder(BorderFactory.createTitledBorder(TITULO_PANEL_ESTADO));
 
-btnBuscarEstado = new JButton(BOTON_BUSCAR_ESTADO);
-btnBuscarEstado.setBackground(COLOR_BOTON_CARRERA);
-btnBuscarEstado.setForeground(COLOR_BOTON_TEXTO);
-btnBuscarEstado.setFocusPainted(false);
+    JLabel lblEstadoBusqueda = new JLabel(LABEL_ESTADO);
+    cmbEstado = new JComboBox<>();
+    cmbEstado.addItem(OPCION_SELECCIONAR);
 
-panelEstado.add(lblEstadoBusqueda);
-panelEstado.add(cmbEstado);
-panelEstado.add(btnBuscarEstado);
+
+    btnBuscarEstado = new JButton(BOTON_BUSCAR_ESTADO);
+    btnBuscarEstado.setBackground(COLOR_BOTON_CARRERA);
+    btnBuscarEstado.setForeground(COLOR_BOTON_TEXTO);
+    btnBuscarEstado.setFocusPainted(false);
+
+    panelEstado.add(lblEstadoBusqueda);
+    panelEstado.add(cmbEstado);
+    panelEstado.add(btnBuscarEstado);
 
 
         // Panel agregar estudiante (Fila 3)
@@ -220,10 +220,11 @@ panelEstado.add(btnBuscarEstado);
         panelAgregar.add(spinPromedio);
         panelAgregar.add(btnAgregar);
 
-        // Panel superior con GridLayout (3 filas, 1 columna)
-        JPanel panelSuperior = new JPanel(new GridLayout(3, 1, 5, 5));
+        JPanel panelSuperior = new JPanel(new GridLayout(5, 1, 5, 5));
         panelSuperior.add(panelBusqueda);
         panelSuperior.add(panelCarrera);
+        panelSuperior.add(panelCurso);
+        panelSuperior.add(panelEstado);
         panelSuperior.add(panelAgregar);
 
         // ────────────────────────────────────────────────────────────────────────
@@ -294,6 +295,24 @@ panelEstado.add(btnBuscarEstado);
             }
         }
     }
+    
+    private void cargarCursos() {
+    if (controlador != null) {
+        String[] codigos = controlador.obtenerCodigosCursos();
+        for (String codigo : codigos) {
+            cmbCurso.addItem(codigo);
+        }
+    }
+}
+
+    private void cargarEstados() {
+    if (controlador != null) {
+        String[] estados = controlador.obtenerEstadosMatricula();
+        for (String estado : estados) {
+            cmbEstado.addItem(estado);
+        }
+    }
+}
 
     // ── Eventos ───────────────────────────────────────────────────────────────
 
