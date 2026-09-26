@@ -10,6 +10,7 @@ import java.util.List;
 //jajajjaj//jajajajaj//jajaja
 import com.miapp.modelo.Curso;
 import com.miapp.utilidades.EstadoMatricula;
+import com.miapp.modelo.Profesor;
 
 
 public class EstudianteController implements IBuscador {
@@ -28,6 +29,8 @@ public class EstudianteController implements IBuscador {
     // ── Array de estudiantes (fuente de datos) ────────────────────────────────
     private Estudiante[] estudiantes;
     private Curso[] cursos;
+    private Profesor[] profesores;
+    private int totalProfesores;
 
     // ── Constructor ───────────────────────────────────────────────────────────
 
@@ -44,6 +47,7 @@ public class EstudianteController implements IBuscador {
     @Override
     public void cargarDatos() {
         inicializarEstudiantes();
+        inicializarProfesores();
     }
 
     @Override
@@ -99,6 +103,13 @@ public class EstudianteController implements IBuscador {
         new Curso("MAT201", 4),
         new Curso("PSI150", 2)
     };
+    
+    
+}
+    
+    private void inicializarProfesores() {
+    profesores = new Profesor[5];
+    totalProfesores = 0;
 }
 
     private void asignarEstadosYMatriculasDeEjemplo() {
@@ -110,8 +121,8 @@ public class EstudianteController implements IBuscador {
         estudiantes[3].setEstadoMatricula(EstadoMatricula.RETIRADO);
     }
     if (estudiantes.length > 9 && estudiantes[9] != null) {
-        estudiantes[9].setEstadoMatricula(EstadoMatricula.GRADUADO);
-    }
+    estudiantes[9].setEstadoMatricula(EstadoMatricula.EGRESADO);
+}
     if (estudiantes.length > 5 && estudiantes[5] != null) estudiantes[5].inscribir(cursos[2]);
 }
 
@@ -207,6 +218,8 @@ public class EstudianteController implements IBuscador {
 
     vista.mostrarEstudiantes(convertirAFilas(resultados));
     }
+    
+    
 
     
     private Object[] convertirAFila(Estudiante e) {
@@ -307,4 +320,144 @@ public class EstudianteController implements IBuscador {
 
         return true;
     }
+    
+    public boolean agregarProfesor(String nombre, String apellido, double salarioBase) {
+    if (nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty()) {
+        vista.mostrarError("El nombre y el apellido del profesor son obligatorios.");
+        return false;
+    }
+
+    if (profesores.length == totalProfesores) {
+        Profesor[] nuevoArray = new Profesor[profesores.length + 5];
+        System.arraycopy(profesores, 0, nuevoArray, 0, profesores.length);
+        profesores = nuevoArray;
+    }
+
+    int nuevoId = totalProfesores + 1;
+    Profesor nuevoProfesor = new Profesor(nombre, apellido, nuevoId, salarioBase);
+    profesores[totalProfesores] = nuevoProfesor;
+    totalProfesores++;
+
+    vista.mostrarMensaje("Profesor agregado correctamente.\nTotal de profesores: " + totalProfesores);
+    return true;
+}
+    
+    public String[] obtenerNombresProfesores() {
+    String[] nombres = new String[totalProfesores];
+    for (int i = 0; i < totalProfesores; i++) {
+        nombres[i] = profesores[i].getNombre() + " " + profesores[i].getApellido();
+    }
+    return nombres;
+}
+    private Profesor buscarProfesorPorNombreCompleto(String nombreCompleto) {
+    for (int i = 0; i < totalProfesores; i++) {
+        String nombreCompletoActual = profesores[i].getNombre() + " " + profesores[i].getApellido();
+        if (nombreCompletoActual.equals(nombreCompleto)) {
+            return profesores[i];
+        }
+    }
+    return null;
+}
+
+private Curso buscarCursoPorCodigo(String codigo) {
+    for (Curso c : cursos) {
+        if (c.getCodigo().equalsIgnoreCase(codigo)) {
+            return c;
+        }
+    }
+    return null;
+}
+
+public boolean asignarProfesorACurso(String nombreProfesor, String codigoCurso) {
+    if (nombreProfesor == null || nombreProfesor.isEmpty() || nombreProfesor.equals("Seleccionar...")) {
+        vista.mostrarError("Seleccione un profesor válido.");
+        return false;
+    }
+    if (codigoCurso == null || codigoCurso.isEmpty() || codigoCurso.equals("Seleccionar...")) {
+        vista.mostrarError("Seleccione un curso válido.");
+        return false;
+    }
+
+    Profesor profesor = buscarProfesorPorNombreCompleto(nombreProfesor);
+    Curso curso = buscarCursoPorCodigo(codigoCurso);
+
+    if (profesor == null || curso == null) {
+        vista.mostrarError("No se encontró el profesor o el curso seleccionado.");
+        return false;
+    }
+
+    curso.setProfesor(profesor);
+    vista.mostrarMensaje("Profesor " + nombreProfesor + " asignado al curso " + codigoCurso + ".");
+    return true;
+}
+
+public String obtenerCursosDeProfesor(String nombreProfesor) {
+    Profesor profesor = buscarProfesorPorNombreCompleto(nombreProfesor);
+    if (profesor == null) {
+        return "Profesor no encontrado.";
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (Curso c : cursos) {
+        if (c.getProfesor() == profesor) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(c.getCodigo());
+        }
+    }
+    return sb.length() > 0 ? sb.toString() : "(sin cursos asignados)";
+}
+
+public String obtenerProfesorDeCurso(String codigoCurso) {
+    Curso curso = buscarCursoPorCodigo(codigoCurso);
+    if (curso == null || curso.getProfesor() == null) {
+        return "(ninguno)";
+    }
+    return curso.getProfesor().getNombre() + " " + curso.getProfesor().getApellido();
+}
+
+public boolean inscribirEstudianteEnCurso(int idEstudiante, String codigoCurso) {
+    if (codigoCurso == null || codigoCurso.isEmpty() || codigoCurso.equals("Seleccionar...")) {
+        vista.mostrarError("Seleccione un curso válido.");
+        return false;
+    }
+
+    Estudiante estudiante = obtenerEstudiantePorId(idEstudiante);
+    Curso curso = buscarCursoPorCodigo(codigoCurso);
+
+    if (estudiante == null || curso == null) {
+        vista.mostrarError("No se encontró el estudiante o el curso.");
+        return false;
+    }
+
+    boolean exito = estudiante.inscribir(curso);
+    if (exito) {
+        vista.mostrarMensaje("Estudiante inscrito en el curso " + codigoCurso + ".");
+    } else {
+        vista.mostrarError("No se pudo inscribir (ya está inscrito o alcanzó el máximo de materias).");
+    }
+    return exito;
+}
+
+public boolean cambiarEstadoEstudiante(int idEstudiante, String nuevoEstado) {
+    if (nuevoEstado == null || nuevoEstado.isEmpty() || nuevoEstado.equals("Seleccionar...")) {
+        vista.mostrarError("Seleccione un estado válido.");
+        return false;
+    }
+
+    Estudiante estudiante = obtenerEstudiantePorId(idEstudiante);
+    if (estudiante == null) {
+        vista.mostrarError("No se encontró el estudiante.");
+        return false;
+    }
+
+    try {
+        EstadoMatricula estado = EstadoMatricula.valueOf(nuevoEstado);
+        estudiante.setEstadoMatricula(estado);
+        vista.mostrarMensaje("Estado actualizado a " + nuevoEstado + ".");
+        return true;
+    } catch (IllegalArgumentException ex) {
+        vista.mostrarError("Estado no válido.");
+        return false;
+    }
+}
 }
